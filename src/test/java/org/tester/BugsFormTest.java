@@ -25,9 +25,9 @@ class BugsFormTest extends BaseTest {
     @MethodSource("range1")
     void addBugInForm(int i) throws ParseException {
         MainPage mainPage = pageFactory.getMainPage();
+        Bug bugData = BugFactory.getInstance().getNumered(i);
 
         int bugsCountBefore = mainPage.getBugsCount();
-        Bug bugData = BugFactory.getInstance().getNumered(i);
         mainPage.bugAddInForm(bugData);
         int bugsCountAfter = mainPage.getBugsCount();
 
@@ -43,9 +43,9 @@ class BugsFormTest extends BaseTest {
     @MethodSource("range2")
     void addBugInline(int i) throws ParseException {
         MainPage mainPage = pageFactory.getMainPage();
+        Bug bugData = BugFactory.getInstance().getNumered(i);
 
         int bugsCountBefore = mainPage.getBugsCount();
-        Bug bugData = BugFactory.getInstance().getNumered(i);
         mainPage.bugAddInline(bugData);
         int bugsCountAfter = mainPage.getBugsCount();
 
@@ -73,9 +73,9 @@ class BugsFormTest extends BaseTest {
         @Test
         void editBugInForm() throws ParseException {
             MainPage mainPage = pageFactory.getMainPage();
+            Bug bugData = BugFactory.getInstance().getNumered(30);
 
             int bugsCountBefore = mainPage.getBugsCount();
-            Bug bugData = BugFactory.getInstance().getNumered(30);
             mainPage.editAddInForm(3, bugData);
             int bugsCountAfter = mainPage.getBugsCount();
 

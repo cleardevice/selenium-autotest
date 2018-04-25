@@ -34,6 +34,10 @@ public class BugManipulateForm extends HtmlElement {
     private Button cancelButton;
 
     public void fillForm(Bug bug) {
+        boolean isChecked = doneCheckbox.getAttribute("aria-checked").contains("true");
+        if (isChecked) {
+            doneCheckbox.select();
+        }
         doneCheckbox.set(bug.getIsDone());
 
         nameField.clear();

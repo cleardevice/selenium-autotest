@@ -1,9 +1,7 @@
 package org.tester.page;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.jruby.RubyProcess;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.tester.domain.Bug;
@@ -60,38 +58,58 @@ public class MainPage extends BasePage {
     public MainPage bugAddInline(Bug bug) {
         toolbar.clickAddInlineButton();
 
-        try { Thread.sleep(200); } catch (InterruptedException e) {}
-        actionFactory.getActions()
-                .sendKeys(bug.getName())
-                .sendKeys(Keys.TAB)
-                .build()
-                .perform();
+        try {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+            }
+            actionFactory.getActions()
+                    .sendKeys(bug.getName())
+                    .sendKeys(Keys.TAB)
+                    .build()
+                    .perform();
 
-        try { Thread.sleep(200); } catch (InterruptedException e) {}
-        actionFactory.getActions()
-                .sendKeys(bug.getNotes())
-                .sendKeys(Keys.TAB)
-                .build()
-                .perform();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+            }
+            actionFactory.getActions()
+                    .sendKeys(bug.getNotes())
+                    .sendKeys(Keys.TAB)
+                    .build()
+                    .perform();
 
-        try { Thread.sleep(200); } catch (InterruptedException e) {}
-        actionFactory.getActions()
-                .sendKeys(bug.getPriorityString())
-                .sendKeys(Keys.TAB)
-                .build()
-                .perform();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+            }
+            actionFactory.getActions()
+                    .sendKeys(bug.getPriorityString())
+                    .sendKeys(Keys.TAB)
+                    .build()
+                    .perform();
 
-        try { Thread.sleep(200); } catch (InterruptedException e) {}
-        actionFactory.getActions()
-                .sendKeys(bug.getDueString())
-                .perform();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+            }
+            actionFactory.getActions()
+                    .sendKeys(bug.getDueString())
+                    .perform();
 
-        List<WebElement> line = bugsTable.getLastLine();
-        actionFactory.getActions()
-                .click(line.get(1)).perform();
+            List<WebElement> line = bugsTable.getLastLine();
+            actionFactory.getActions()
+                    .click(line.get(1)).perform();
 
-        toolbar.clickApplyButton();
-        try { Thread.sleep(500); } catch (InterruptedException e) {}
+            toolbar.clickApplyButton();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+        } catch (StaleElementReferenceException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace().toString());
+        }
 
         return this;
     }
