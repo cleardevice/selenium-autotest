@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.tester.domain.Bug;
 import org.tester.domain.factory.BugFactory;
 import org.tester.page.MainPage;
-import org.tester.test.BaseTest;
+import org.tester.base.BaseTest;
 
 import java.text.ParseException;
 import java.util.stream.IntStream;
@@ -15,8 +15,15 @@ class BugsFormTest extends BaseTest {
 
     private static int ITEMS_CREATE_COUNT = 5;
 
-    @BeforeAll
-    static void setUp() {
+    private static boolean initialized = false;
+
+    @BeforeEach
+    void setUp() {
+        if (initialized)
+            return;
+
+        initialized = true;
+
         pageFactory.getMainPage()
                 .clearAllBugs();
     }
@@ -35,7 +42,7 @@ class BugsFormTest extends BaseTest {
         Assertions.assertEquals(bugsCountBefore+1, bugsCountAfter);
     }
 
-    static IntStream range1() {
+    private static IntStream range1() {
         return IntStream.range(1, ITEMS_CREATE_COUNT+1);
     }
 
@@ -53,11 +60,11 @@ class BugsFormTest extends BaseTest {
         Assertions.assertEquals(bugsCountBefore+1, bugsCountAfter);
     }
 
-    static IntStream range2() {
+    private static IntStream range2() {
         return IntStream.range(ITEMS_CREATE_COUNT+1, ITEMS_CREATE_COUNT*2+1);
     }
 
-
+    @Disabled
     @Nested
     class Step1 {
         @Test

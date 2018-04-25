@@ -1,30 +1,28 @@
-package org.tester.test;
+package org.tester.config;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.tester.page.factory.PageFactory;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 
-public class BaseTest {
+@Configuration
+@ComponentScan("org.tester")
+public class AppConfig {
 
-    private static WebDriver driver;
-    protected static PageFactory pageFactory;
-
-    static WebDriver getDriver() throws MalformedURLException {
-        if (driver != null)
-            return driver;
-
+    @Bean
+    public WebDriver getWebDriver() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setBrowserName("chrome");
         capabilities.setCapability("enableVNC", true );
         capabilities.setCapability("enableVideo", true );
 
-        driver = new RemoteWebDriver(
+        WebDriver driver = new RemoteWebDriver(
                 URI.create("http://localhost:4444/wd/hub").toURL(),
                 capabilities
         );
@@ -33,13 +31,8 @@ public class BaseTest {
         return driver;
     }
 
-    @BeforeAll
-    static void setUpBaseTest() throws MalformedURLException {
-        pageFactory = PageFactory.getInstance(getDriver());
-    }
-
-    @AfterAll
-    static void killWebDriver() {
-        driver.quit();
+    @Bean
+    public PageFactory getPageFactory() throws MalformedURLException {
+        return PageFactory.getInstance(getWebDriver());
     }
 }
