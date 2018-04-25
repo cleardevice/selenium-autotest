@@ -108,7 +108,22 @@ public class MainPage extends BasePage {
         return this;
     }
 
-    public MainPage editBug(int bugNumber, Bug bug) {
+    private MainPage editBug(int bugNumber, Bug bug) {
+        bugsTable.getLineNumber(bugNumber).get(2).click();
+
+        toolbar.clickEditInForm();
+        waitUntilMaskNotVisible();
+
+        bugEditForm.fillForm(bug);
+        bugEditForm.clickOk();
+
+        return this;
+    }
+
+    public MainPage editAddInForm(int bugNumber, Bug bug) {
+        editBug(bugNumber, bug);
+        waitUntilMaskVisible();
+
         return this;
     }
 
@@ -136,17 +151,24 @@ public class MainPage extends BasePage {
         waitUntilMaskVisible();
     }
 
-    public Bug getLastBug() throws ParseException {
-        List<WebElement> bugLine = bugsTable.getLastLine();
+    public Bug getBugByLine(int lineNumber) throws ParseException {
+        List<WebElement> bugLine = bugsTable.getLineNumber(lineNumber);
 
         String bugDateString = bugLine.get(5).findElement(By.cssSelector(".x-grid-cell-inner")).getText();
         Date bugDate = new SimpleDateFormat("MM/dd/yyyy").parse(bugDateString);
 
+        boolean isDone = bugLine.get(1).findElement(By.cssSelector(".x-grid-checkheader"))
+                    .getAttribute("class").contains("x-grid-checkheader-checked");
+
         return BugFactory.getInstance().get(
-                bugLine.get(1).findElement(By.cssSelector(".x-grid-checkheader.x-grid-checkheader-checked")) != null,
+                isDone,
                 bugLine.get(2).findElement(By.cssSelector(".x-grid-cell-inner")).getText(),
                 bugLine.get(3).findElement(By.cssSelector(".x-grid-cell-inner")).getText(),
                 Integer.parseInt(bugLine.get(4).findElement(By.cssSelector(".x-grid-cell-inner")).getText()),
                 bugDate);
+    }
+
+    public Bug getBugFromLastLine() throws ParseException {
+        return getBugByLine(bugsTable.getRowsCount()-1);
     }
 }

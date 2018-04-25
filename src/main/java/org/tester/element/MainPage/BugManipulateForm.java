@@ -34,9 +34,7 @@ public class BugManipulateForm extends HtmlElement {
     private Button cancelButton;
 
     public void fillForm(Bug bug) {
-        doneCheckbox.deselect();
-        if (bug.getIsDone())
-            doneCheckbox.select();
+        doneCheckbox.set(bug.getIsDone());
 
         nameField.clear();
         nameField.sendKeys(bug.getName());
@@ -56,10 +54,5 @@ public class BugManipulateForm extends HtmlElement {
     }
     public void clickCancel() {
         cancelButton.click();
-    }
-
-    public boolean isFormVisible() {
-        // TODO
-        return true;
     }
 }

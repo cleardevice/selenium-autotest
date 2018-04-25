@@ -39,4 +39,8 @@ public class Toolbar extends HtmlElement {
     public void clickAddInFormButton() {
         addInFormButton.click();
     }
+
+    public void clickEditInForm() {
+        editInFormButton.click();
+    }
 }

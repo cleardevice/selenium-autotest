@@ -31,7 +31,7 @@ class BugsFormTest extends BaseTest {
         mainPage.bugAddInForm(bugData);
         int bugsCountAfter = mainPage.getBugsCount();
 
-        Assertions.assertEquals(bugData, mainPage.getLastBug());
+        Assertions.assertEquals(bugData, mainPage.getBugFromLastLine());
         Assertions.assertEquals(bugsCountBefore+1, bugsCountAfter);
     }
 
@@ -49,7 +49,7 @@ class BugsFormTest extends BaseTest {
         mainPage.bugAddInline(bugData);
         int bugsCountAfter = mainPage.getBugsCount();
 
-        Assertions.assertEquals(bugData, mainPage.getLastBug());
+        Assertions.assertEquals(bugData, mainPage.getBugFromLastLine());
         Assertions.assertEquals(bugsCountBefore+1, bugsCountAfter);
     }
 
@@ -71,20 +71,31 @@ class BugsFormTest extends BaseTest {
         }
 
         @Test
-        void editBugInForm() {
-
-        }
-
-        @Test
-        void deleteAllBugs() {
+        void editBugInForm() throws ParseException {
             MainPage mainPage = pageFactory.getMainPage();
 
             int bugsCountBefore = mainPage.getBugsCount();
-            mainPage.clearAllBugs();
+            Bug bugData = BugFactory.getInstance().getNumered(30);
+            mainPage.editAddInForm(3, bugData);
             int bugsCountAfter = mainPage.getBugsCount();
 
-            Assertions.assertEquals(ITEMS_CREATE_COUNT*2, bugsCountBefore);
-            Assertions.assertEquals(0, bugsCountAfter);
+            Assertions.assertEquals(bugData, mainPage.getBugFromLastLine());
+            Assertions.assertEquals(bugsCountBefore, bugsCountAfter);
+        }
+
+        @Nested
+        class Step2 {
+            @Test
+            void deleteAllBugs() {
+                MainPage mainPage = pageFactory.getMainPage();
+
+                int bugsCountBefore = mainPage.getBugsCount();
+                mainPage.clearAllBugs();
+                int bugsCountAfter = mainPage.getBugsCount();
+
+                Assertions.assertEquals(ITEMS_CREATE_COUNT*2, bugsCountBefore);
+                Assertions.assertEquals(0, bugsCountAfter);
+            }
         }
     }
 }

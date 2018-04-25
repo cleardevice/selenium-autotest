@@ -21,13 +21,21 @@ public class BugsTable extends HtmlElement {
         }
     }
 
-    public List<WebElement> getFirstLine() {
+    public int getRowsCount() {
         List<List<WebElement>> rows = dataTable.getRows();
-        return rows.get(0);
+        return rows.size();
+    }
+
+    public List<WebElement> getLineNumber(int line) {
+        List<List<WebElement>> rows = dataTable.getRows();
+        return rows.get(line);
+    }
+
+    public List<WebElement> getFirstLine() {
+        return getLineNumber(0);
     }
 
     public List<WebElement> getLastLine() {
-        List<List<WebElement>> rows = dataTable.getRows();
-        return rows.get(rows.size()-1);
+        return getLineNumber(getRowsCount()-1);
     }
 }
