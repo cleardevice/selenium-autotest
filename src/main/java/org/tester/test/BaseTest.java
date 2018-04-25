@@ -28,6 +28,8 @@ public class BaseTest {
                 URI.create("http://localhost:4444/wd/hub").toURL(),
                 capabilities
         );
+        driver.manage().window().maximize();
+
         return driver;
     }
 

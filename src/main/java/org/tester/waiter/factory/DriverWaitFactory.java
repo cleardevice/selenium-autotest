@@ -15,6 +15,6 @@ public class DriverWaitFactory {
     }
 
     public BaseDriverWait getBaseDriverWait() {
-        return new BaseDriverWait(driver, 5);
+        return new BaseDriverWait(driver, 2);
     }
 }

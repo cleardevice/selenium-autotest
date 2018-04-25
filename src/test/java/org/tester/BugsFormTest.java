@@ -1,15 +1,17 @@
 package org.tester;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.tester.domain.BugFactory;
 import org.tester.page.MainPage;
 import org.tester.test.BaseTest;
 
+import java.util.stream.IntStream;
+
 class BugsFormTest extends BaseTest {
+
+    private static int MAX_ITEMS_CREATED = 10;
 
     @BeforeAll
     static void setUp() {
@@ -18,24 +20,34 @@ class BugsFormTest extends BaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })
-    void addItem(int i) {
+    @MethodSource("range")
+    void addBug(int i) {
         MainPage mainPage = pageFactory.getMainPage();
 
         int bugsCountBefore = mainPage.getBugsCount();
         mainPage
-                .addBug(BugFactory.getInstance().getNumered(i));
+                .bugAdd(BugFactory.getInstance().getNumered(i));
         int bugsCountAfter = mainPage.getBugsCount();
 
-        Assertions.assertEquals(bugsCountBefore, bugsCountAfter);
+        Assertions.assertEquals(bugsCountBefore+1, bugsCountAfter);
     }
 
-    @Test
-    void addBugIfExists() {
-        String actualErrorMessage = pageFactory.getMainPage()
-                .addBug(BugFactory.getInstance().getNumered(1))
-                .getErrorMessage();
+    static IntStream range() {
+        return IntStream.range(1, MAX_ITEMS_CREATED+1);
+    }
 
-        Assertions.assertEquals("Name has already been taken", actualErrorMessage);
+    @Nested
+    class Step1 {
+        @Test
+        void addBugIfExists() {
+            String actualErrorMessage = pageFactory.getMainPage()
+                    .bugAddWithError(BugFactory.getInstance().getNumered(1))
+                    .getErrorMessage();
+
+            pageFactory.getMainPage()
+                    .bugAddFormClose();
+
+            Assertions.assertEquals("Name has already been taken", actualErrorMessage);
+        }
     }
 }

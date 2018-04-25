@@ -10,7 +10,9 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 class BasePage implements PageObjectInterface {
 
+    protected final String defaultWindowCssSelector = ".x-window.x-window-default";
     protected final String confirmWindowCssSelector = ".x-window.x-message-box";
+    protected final String maskCssSelector = "div.x-mask";
 
     private WebDriver driver;
     protected DriverWaitFactory driverWaitFactory;
@@ -35,8 +37,20 @@ class BasePage implements PageObjectInterface {
                 .waitUntilVisibleByCssSelector(selector);
     }
 
-    void waitUntilMaskOn() {
-        waitUntilVisible("div.x-mask");
+    void waitUntilMaskNotVisible() {
+        waitUntilNotVisible(maskCssSelector);
+    }
+
+    void waitUntilMaskVisible() {
+        waitUntilVisible(maskCssSelector);
+    }
+
+    void waitForDefaultWindow() {
+        waitUntilNotVisible(defaultWindowCssSelector);
+    }
+
+    void waitForDefaultWindowClosed() {
+        waitUntilVisible(defaultWindowCssSelector);
     }
 
     void waitForConfirmWindow() {

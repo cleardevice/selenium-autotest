@@ -37,18 +37,29 @@ public class MainPage extends BasePage {
         PageFactory.initElements(new HtmlElementDecorator(new HtmlElementLocatorFactory(driver)), this);
     }
 
-    MainPage openAddBugForm() {
+    private void addBug(Bug bug) {
         toolbar.clickAddInFormButton();
-        waitUntilMaskOn();
+        waitUntilMaskNotVisible();
+
+        bugAddForm.fillForm(bug);
+        bugAddForm.clickOk();
+    }
+
+    public MainPage bugAdd(Bug bug) {
+        addBug(bug);
+        waitUntilMaskVisible();
 
         return this;
     }
 
-    public MainPage addBug(Bug bug) {
-        openAddBugForm();
-        bugAddForm.fillForm(bug);
-        bugAddForm.clickOk();
-        waitUntilMaskOn();
+    public MainPage bugAddWithError(Bug bug) {
+        addBug(bug);
+
+        return this;
+    }
+
+    public MainPage bugAddFormClose() {
+        bugAddForm.clickCancel();
 
         return this;
     }
@@ -73,6 +84,6 @@ public class MainPage extends BasePage {
         toolbar.clickDeleteButton();
         waitForConfirmWindow();
         confirmWindow.clickYesButton();
-        waitUntilMaskOn();
+        waitUntilMaskVisible();
     }
 }
