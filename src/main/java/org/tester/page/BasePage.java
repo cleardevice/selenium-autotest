@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.tester.action.CtrlClickAction;
+import org.tester.action.factory.ActionFactory;
 import org.tester.waiter.factory.DriverWaitFactory;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
@@ -14,17 +14,15 @@ class BasePage implements PageObjectInterface {
     protected final String confirmWindowCssSelector = ".x-window.x-message-box";
     protected final String maskCssSelector = "div.x-mask";
 
-    private WebDriver driver;
     protected DriverWaitFactory driverWaitFactory;
-    protected CtrlClickAction ctrlClickAction;
+    protected ActionFactory actionFactory;
 
     @FindBy(id = "msg-div")
     private TextBlock textMessage;
 
-    BasePage(WebDriver aDriver) {
-        driver = aDriver;
+    BasePage(WebDriver driver) {
         driverWaitFactory = DriverWaitFactory.getInstance(driver);
-        ctrlClickAction = new CtrlClickAction(driver);
+        actionFactory = ActionFactory.getInstance(driver);
     }
 
     private void waitUntilNotVisible(String selector) {

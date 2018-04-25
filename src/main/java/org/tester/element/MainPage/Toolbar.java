@@ -24,11 +24,19 @@ public class Toolbar extends HtmlElement {
     @FindBy(xpath = ".//span[contains(text(),'Search')]/parent::button")
     private Button searchButton;
 
-    public void clickAddInFormButton() {
-        addInFormButton.click();
+    public void clickAddInlineButton() {
+        addButton.click();
+    }
+
+    public void clickApplyButton() {
+        applyButton.click();
     }
 
     public void clickDeleteButton() {
         deleteButton.click();
+    }
+
+    public void clickAddInFormButton() {
+        addInFormButton.click();
     }
 }

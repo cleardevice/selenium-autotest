@@ -1,15 +1,20 @@
 package org.tester.page;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.tester.domain.Bug;
+import org.tester.domain.factory.BugFactory;
 import org.tester.element.MainPage.*;
 import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementLocatorFactory;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainPage extends BasePage {
@@ -45,14 +50,53 @@ public class MainPage extends BasePage {
         bugAddForm.clickOk();
     }
 
-    public MainPage bugAdd(Bug bug) {
+    public MainPage bugAddInForm(Bug bug) {
         addBug(bug);
         waitUntilMaskVisible();
 
         return this;
     }
 
-    public MainPage bugAddWithError(Bug bug) {
+    public MainPage bugAddInline(Bug bug) {
+        toolbar.clickAddInlineButton();
+
+        try { Thread.sleep(200); } catch (InterruptedException e) {}
+        actionFactory.getActions()
+                .sendKeys(bug.getName())
+                .sendKeys(Keys.TAB)
+                .build()
+                .perform();
+
+        try { Thread.sleep(200); } catch (InterruptedException e) {}
+        actionFactory.getActions()
+                .sendKeys(bug.getNotes())
+                .sendKeys(Keys.TAB)
+                .build()
+                .perform();
+
+        try { Thread.sleep(200); } catch (InterruptedException e) {}
+        actionFactory.getActions()
+                .sendKeys(bug.getPriorityString())
+                .sendKeys(Keys.TAB)
+                .build()
+                .perform();
+
+        try { Thread.sleep(200); } catch (InterruptedException e) {}
+        actionFactory.getActions()
+                .sendKeys(bug.getDueString())
+                .perform();
+
+        List<WebElement> line = bugsTable.getLastLine();
+        actionFactory.getActions()
+                .click(line.get(1)).perform();
+
+        toolbar.clickApplyButton();
+        try { Thread.sleep(500); } catch (InterruptedException e) {}
+
+        return this;
+    }
+
+    public MainPage bugAddInFormWithError(Bug bug) {
         addBug(bug);
 
         return this;
@@ -72,18 +116,37 @@ public class MainPage extends BasePage {
         return bugsTable.getBugsCount();
     }
 
-    public void clearBugs() {
+    public void clearAllBugs() {
         if (bugsTable.getBugsCount() == 0)
             return;
 
-        List<WebElement> list = new ArrayList<>();
-        list.add(bugsTable.getFirstLineElement());
-        list.add(bugsTable.getLastListElement());
-        ctrlClickAction.perform(list);
+        actionFactory.getActions()
+                .keyDown(Keys.LEFT_SHIFT)
+                // Get elements for select by click with shift
+                // 2nd element click select line
+                .click(bugsTable.getFirstLine().get(2))
+                .click(bugsTable.getLastLine().get(2))
+                .keyUp(Keys.LEFT_SHIFT)
+                .build()
+                .perform();
 
         toolbar.clickDeleteButton();
         waitForConfirmWindow();
         confirmWindow.clickYesButton();
         waitUntilMaskVisible();
+    }
+
+    public Bug getLastBug() throws ParseException {
+        List<WebElement> bugLine = bugsTable.getLastLine();
+
+        String bugDateString = bugLine.get(5).findElement(By.cssSelector(".x-grid-cell-inner")).getText();
+        Date bugDate = new SimpleDateFormat("MM/dd/yyyy").parse(bugDateString);
+
+        return BugFactory.getInstance().get(
+                bugLine.get(1).findElement(By.cssSelector(".x-grid-checkheader.x-grid-checkheader-checked")) != null,
+                bugLine.get(2).findElement(By.cssSelector(".x-grid-cell-inner")).getText(),
+                bugLine.get(3).findElement(By.cssSelector(".x-grid-cell-inner")).getText(),
+                Integer.parseInt(bugLine.get(4).findElement(By.cssSelector(".x-grid-cell-inner")).getText()),
+                bugDate);
     }
 }

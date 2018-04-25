@@ -1,4 +1,7 @@
-package org.tester.domain;
+package org.tester.domain.factory;
+
+import org.apache.commons.lang3.time.DateUtils;
+import org.tester.domain.Bug;
 
 import java.util.Date;
 
@@ -20,6 +23,8 @@ public class BugFactory {
 
     public Bug getNumered(int num) {
         String numStr = Integer.toString(num);
-        return get(true, "name" + numStr, "notes" + numStr, num, new Date());
+        Date bugDate = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
+
+        return get(true, "name" + numStr, "notes" + numStr, num, bugDate);
     }
 }

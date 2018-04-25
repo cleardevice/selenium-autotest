@@ -3,6 +3,7 @@ package org.tester.domain;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Bug {
     private boolean isDone;
@@ -74,5 +75,37 @@ public class Bug {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bug bug = (Bug) o;
+        return isDone == bug.isDone &&
+                priority == bug.priority &&
+                Objects.equals(name, bug.name) &&
+                Objects.equals(notes, bug.notes) &&
+                Objects.equals(due, bug.due) &&
+                Objects.equals(createdAt, bug.createdAt) &&
+                Objects.equals(updatedAt, bug.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isDone, name, notes, priority, due, createdAt, updatedAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Bug{" +
+                "isDone=" + isDone +
+                ", name='" + name + '\'' +
+                ", notes='" + notes + '\'' +
+                ", priority=" + priority +
+                ", due=" + due +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }
