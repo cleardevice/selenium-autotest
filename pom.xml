@@ -52,6 +52,11 @@
             </configurationParameters>
             -->
           </properties>
+
+          <useUnlimitedThreads>true</useUnlimitedThreads>
+          <reuseForks>true</reuseForks>
+          <parallel>methods</parallel>
+          <argLine>-Xms512m -Xmx512m</argLine>
         </configuration>
         <dependencies>
           <dependency>

@@ -63,4 +63,11 @@ class BasePage implements PageObjectInterface {
 
         return textMessage.findElement(By.cssSelector("#msg-div div.msg p")).getText();
     }
+
+    public void wait(int mseconds) {
+        try {
+            Thread.sleep(mseconds);
+        } catch (InterruptedException e) {
+        }
+    }
 }
