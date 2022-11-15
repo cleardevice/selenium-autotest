@@ -2,7 +2,10 @@ package org.tester.element.MainPage;
 
 import org.openqa.selenium.support.FindBy;
 import org.tester.domain.Bug;
-import ru.yandex.qatools.htmlelements.element.*;
+import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
+import ru.yandex.qatools.htmlelements.element.HtmlElement;
+import ru.yandex.qatools.htmlelements.element.TextInput;
 
 public class BugManipulateForm extends HtmlElement {
 
@@ -38,7 +41,7 @@ public class BugManipulateForm extends HtmlElement {
         if (isChecked) {
             doneCheckbox.select();
         }
-        doneCheckbox.set(bug.getIsDone());
+        doneCheckbox.set(bug.isDone());
 
         nameField.clear();
         nameField.sendKeys(bug.getName());
@@ -56,6 +59,7 @@ public class BugManipulateForm extends HtmlElement {
     public void clickOk() {
         okButton.click();
     }
+
     public void clickCancel() {
         cancelButton.click();
     }

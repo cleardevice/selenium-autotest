@@ -12,7 +12,7 @@ public class BugFactory {
 
     public Bug get(boolean isDone, String name, String notes, int priority, Date due) {
         Bug b = new Bug();
-        b.setIsDone(isDone);
+        b.setDone(isDone);
         b.setName(name);
         b.setNotes(notes);
         b.setPriority(priority);
